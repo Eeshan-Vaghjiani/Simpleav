@@ -1,0 +1,211 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    text-decoration: none;
+    list-style: none ;
+    box-sizing: border-box;
+}
+.but :hover {
+    color: rgba(50, 135, 214, 0.975);
+}
+.color{
+    color: rgba(50, 135, 214, 0.975);
+    font-size: large;
+    font-weight: 500;
+
+}
+.color:hover{
+    color: rgb(15, 255, 255);
+}
+.body2 {
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    height: 109vh;
+    background-image: url(background2.jpg)
+}
+
+.container {
+    display: flex;
+}
+.nav{
+    width:200px;
+    float: left;
+    height: 50px;
+  }
+  .nav img {
+    width: 100px;
+    height: 105px;
+    size: 30px;
+    background-color: transparent;
+    
+  }
+  .simpleav{
+    text-decoration: none;
+    color: rgba(50, 135, 214, 0.975);
+    font-size: 36px;
+    font-weight: 500;
+    margin-top: -80px;
+    margin-left: 100px;
+  
+  }
+
+.sidebar {
+    width: 250px;
+    padding: 60px;
+    height: 109vh;
+    margin-left:-120px;
+    
+}
+
+
+
+.sidebar ul {
+    list-style-type: none;
+}
+
+.sidebar ul li {
+    margin: 35px 0;
+
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: rgba(50, 135, 214, 0.975);
+    font-size: 16px;
+    font-weight: 600;
+}
+.sidebar ul li a:hover{
+    color: rgb(15, 255, 255);
+}
+.main-content {
+    flex: 1;
+    padding: 60px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+header nav ul {
+    display: flex;
+    list-style-type: none;
+}
+
+header nav ul li {
+    margin-right: 20px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: rgba(50, 135, 214, 0.975);
+    font-size: 18px;
+}
+header nav ul li a:hover{
+    text-decoration: underline;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.department-head {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.department-head h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.department-head form {
+    display: grid;
+    grid-gap: 15px;
+}
+
+.department-head label {
+    font-size: 14px;
+    color: #666;
+}
+
+.department-head input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttons button {
+    padding: 10px 20px;
+    background-color: #34c38f;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttons button:hover {
+    background-color: #2ca67d;
+}
+.leave-dashboard {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.leave-dashboard h2 {
+    margin-top: 20px;
+    color: rgba(50, 135, 214, 0.975);
+}
+
+.leave-charts {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.chart {
+    width: 18%;
+    height: 120px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.leave-approval {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.leave-approval th, .leave-approval td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.team-leave-track {
+    width: 100%;
+    height: 200px;
+}

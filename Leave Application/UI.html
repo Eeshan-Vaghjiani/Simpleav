@@ -1,0 +1,165 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Leave Dashboard</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .leave-charts {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .chart-container {
+            width: 150px;
+            height: 150px;
+            position: relative;
+        }
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        .team-leave-track-container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body class="body2">
+    <div class="nav">
+        <img src="logo2.png" alt="logo">
+        <h2 class="simpleav">SimpLeav</h2>
+    </div> 
+    <div class="container">
+        
+        <aside class="sidebar">
+            <ul>
+                <div class="color">
+                    <li><a href="#" >Dashboard</a></li>
+                    <li><a href="#">Leave Requests</a></li>
+                    <li><a href="#">Analytics</a></li>
+                    <li><a href="#">Budgets</a></li>
+                    <li><a href="#">Settings</a></li>
+                </div>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <nav>
+                    <ul>
+                        <li><a href="#">HOME</a></li>
+                        <li><a href="#">ABOUT US</a></li>
+                    </ul>
+                </nav>
+            </header>
+
+            <section class="leave-dashboard">
+                <h2>Leave Availability</h2>
+                <div class="leave-charts">
+                    <div class="chart-container"><canvas id="AnnualChart"></canvas></div>
+                    <div class="chart-container"><canvas id="CasualChart"></canvas></div>
+                    <div class="chart-container"><canvas id="SickChart"></canvas></div>
+                    <?php if ($gender === 'male'): ?>
+                        <div class="chart-container"><canvas id="PaternityChart"></canvas></div>
+                    <?php else: ?>
+                        <div class="chart-container"><canvas id="MaternityChart"></canvas></div>
+                    <?php endif; ?>
+                    <div class="chart-container"><canvas id="CompassionateChart"></canvas></div>
+                </div>
+
+                <h2>Team Leave Track</h2>
+                <div class="team-leave-track-container">
+                    <canvas id="teamLeaveChart"></canvas>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // Pie Charts Configuration
+        function createChart(elementId, title, remaining, maxLeave) {
+            const ctx = document.getElementById(elementId).getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Used', 'Remaining'],
+                    datasets: [{
+                        data: [maxLeave - remaining, remaining],  // Used = maxLeave - remaining
+                        backgroundColor: ['#FF6384', '#36A2EB'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: title
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create charts for each leave type
+        createChart('AnnualChart', 'Annual Leave', leaveData.Annual, maxLeaveDays.Annual);
+        createChart('CasualChart', 'Casual Leave', leaveData.Casual, maxLeaveDays.Casual);
+        createChart('SickChart', 'Sick Leave', leaveData.Sick, maxLeaveDays.Sick);
+
+        if (leaveData.Paternity !== undefined) {
+            createChart('PaternityChart', 'Paternity Leave', leaveData.Paternity, maxLeaveDays.Paternity);
+        } else if (leaveData.Maternity !== undefined) {
+            createChart('MaternityChart', 'Maternity Leave', leaveData.Maternity, maxLeaveDays.Maternity);
+        }
+
+        createChart('CompassionateChart', 'Compassionate Leave', leaveData.Compassionate, maxLeaveDays.Compassionate);
+
+        // Team Leave Track Bar Chart
+        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        const teamLeaveCtx = document.getElementById('teamLeaveChart').getContext('2d');
+        new Chart(teamLeaveCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Leaves',
+                    data: monthlyLeaves,
+                    backgroundColor: 'rgba(54, 162, 235, 0.85)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Team Leave Track'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
