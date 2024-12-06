@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Leave Dashboard</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .navigation {
+
+            padding: 15px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .nav img {
+            height: 50px;
+            vertical-align: middle;
+        }
+        .simpleav {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .main-content {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .department-head {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Space between buttons */
+        }
+        .buttons button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .buttons button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+        .buttons a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body class="body1">
+    <nav class="navigation">
+        <div class="nav">
+            <a href="">
+                <img src="logo2.png" alt="logo">
+            </a>
+            <h2 class="simpleav">SimpLeav</h2>
+        </div>
+    </nav>
+    <main class="main-content">
+        <section class="department-head">
+            <h2>Department Head</h2>
+            <div class="buttons">
+                <button type="button"><a href="requests.php">Check Pending Requests</a></button>
+                <button type="button"><a href="approved_requests.php">Check Approved Requests</a></button>
+                <button type="button"><a href="staff.php">Total Staff Members</a></button>
+                <button type="button"><a href="main.php">HOME PAGE</a></button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

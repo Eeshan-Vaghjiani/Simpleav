@@ -1,0 +1,170 @@
+* {
+    margin: 0.2cm;
+    box-sizing: border-box;
+}
+.body1{
+    width: 100%;
+    background-color: white;
+    background-position: center;
+    background-size: cover;
+    height: 109vh;
+    background-image: url(background2.jpg);
+}
+
+.nav{
+    width:200px;
+    float: left;
+    height: 50px;
+    padding-bottom: 40px;
+}
+.nav img {
+    width: 100px;
+    height: 105px;
+    size: 30px;
+    background-color: transparent;
+    
+}
+.simpleav{
+    text-decoration: none;
+    color: rgba(50, 135, 214, 0.975);
+    font-size: 36px;
+    font-weight: 500;
+    margin-top: -80px;
+    margin-left: 100px;
+
+  
+}
+.but :hover {
+    color: aqua;
+}
+.color :hover{
+    text-decoration: underline;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+}
+
+.container {
+    display: flex;
+}
+
+.sidebar {
+    width: 200px;
+    padding: 20px;
+    height: 109vh;
+    margin-top: 50px;
+    margin-left: -120px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+
+}
+
+.sidebar ul li {
+    margin: 35px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color:rgba(50, 135, 214, 0.975);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+header nav ul {
+    display: flex;
+    list-style-type: none;
+}
+
+header nav ul li {
+    margin-right: 20px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #34c38f;
+    font-size: 18px;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    align-items: center;
+}
+
+.department-head {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.department-head h2 {
+    margin-bottom: 20px;
+    color: rgba(50, 135, 214, 0.975)
+}
+
+.department-head form {
+    display: grid;
+    grid-gap: 15px;
+}
+
+.department-head label {
+    font-size: 14px;
+    color: rgba(50, 135, 214, 0.975);
+}
+
+.department-head input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+.department-head form input::placeholder{
+    color: rgba(50, 135, 214, 0.975);
+}
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttons button {
+    padding: 10px 20px;
+    background-color: rgba(50, 135, 214, 0.975);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    
+}
+.buttons a{
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.buttons button:hover {
+    background-color: rgba(49, 146, 237, 0.975);
+}
