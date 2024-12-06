@@ -27,7 +27,7 @@ SimpleAV is an easy-to-use leave management system designed to streamline the pr
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/alvviinn/Simpleav.git
+   git clone https://github.com/Eeshan-Vaghjiani/Simpleav.git
 **How It Works**
 **Employee Workflow:**
 
