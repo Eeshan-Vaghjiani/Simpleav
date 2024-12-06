@@ -22,6 +22,7 @@
     "webpack-merge": "^5.10.0"
   },
   "dependencies": {
-    "express-rate-limit": "^7.4.1"
+    "express-rate-limit": "^7.4.1",
+    "he": "^1.2.0"
   }
 }
