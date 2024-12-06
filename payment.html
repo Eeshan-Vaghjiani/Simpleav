@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simpleav</title>
+  <link rel="shortcut icon" href="img/logo2.jpg" type="image/x-icon">
+  <link rel="stylesheet" href="css/style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+<section id="payment">
+  <div class="payment-container">
+    <h2>Payment Details</h2>
+    <form id="payment-form">
+      <div class="form-group">
+        <label for="card-name">Cardholder Name</label>
+        <input type="text" id="card-name" required>
+      </div>
+      <div class="form-group">
+        <label for="card-number">Card Number</label>
+        <input type="text" id="card-number" required>
+      </div>
+      <div class="form-group">
+        <label for="expiry">Expiry Date (MM/YY)</label>
+        <input type="text" id="expiry" required>
+      </div>
+      <div class="form-group">
+        <label for="cvv">CVV</label>
+        <input type="text" id="cvv" required>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn">Pay Now</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script src="script.js"></script>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+  AOS.init({
+  });
+</script>
+</body>
+</html>
