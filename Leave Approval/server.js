@@ -1,18 +1,10 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-const RateLimit = require('express-rate-limit');
-const he = require('he');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-// Rate limiting middleware
-const limiter = RateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // max 100 requests per windowMs
-});
-app.use(limiter);
 
 // Database connection
 const db = mysql.createConnection({
@@ -55,7 +47,7 @@ app.post('/requests/:id/approve', (req, res) => {
         WHERE leave_id = ?
     `;
     db.query(query, [status, approved_by, comments, leaveId], (err, result) => {
-        if (err) return res.status(500).send(he.encode(err.message));
+        if (err) return res.status(500).send(err);
         res.send({ message: 'Leave request updated successfully' });
     });
 });
