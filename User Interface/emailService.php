@@ -71,13 +71,35 @@ class EmailService {
         }
     }
 
+    public function sendSuspiciousActivityNotification($to) {
+        try {
+            $this->mailer->clearAddresses();
+            $this->mailer->addAddress($to);
+            $this->mailer->isHTML(true);
+            $this->mailer->Subject = 'Suspicious Activity Detected on Your Account';
+            $this->mailer->Body = "
+                <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>
+                    <h2 style='color: #333;'>Suspicious Activity Alert</h2>
+                    <p>We have detected multiple failed attempts to access your account.</p>
+                    <p>If this was not you, we recommend changing your password immediately.</p>
+                    <p style='color: #666;'>If you have any questions, please contact support.</p>
+                </div>
+            ";
+
+            return $this->mailer->send();
+        } catch (Exception $e) {
+            error_log("Failed to send suspicious activity notification: " . $e->getMessage());
+            return false;
+        }
+    }
+
     public function sendLeaveApplicationConfirmation($to, $leaveDetails) {
         try {
             $this->mailer->clearAddresses();
             $this->mailer->addAddress($to);
             $this->mailer->isHTML(true);
             $this->mailer->Subject = 'Leave Application Confirmation - SimpLeav';
-            
+
             // Create a professional HTML email template
             $this->mailer->Body = "
                 <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;'>
@@ -145,7 +167,7 @@ class EmailService {
             $this->mailer->clearAddresses();
             $this->mailer->addAddress($to);
             $this->mailer->isHTML(true);
-            
+
             // Set subject based on status
             $statusText = $status === 'approved' ? 'Approved' : 'Rejected';
             $statusColor = $status === 'approved' ? '#28a745' : '#dc3545';
@@ -211,14 +233,14 @@ class EmailService {
                     <!-- Manager's Notes -->
                     <div style='background-color: #f9f9f9; padding: 15px; border-radius: 5px;'>
                         <h2 style='color: rgba(50, 135, 214, 0.975); font-size: 18px; margin-top: 0;'>Manager's Notes</h2>
-                        <p style='color: #333; margin: 0;'>" . 
-                        (!empty($leaveDetails['notes']) ? $leaveDetails['notes'] : 'No additional notes provided.') . 
+                        <p style='color: #333; margin: 0;'>" .
+                        (!empty($leaveDetails['notes']) ? $leaveDetails['notes'] : 'No additional notes provided.') .
                         "</p>
                     </div>
 
                     <!-- Next Steps -->
                     <div style='margin-top: 20px; padding: 15px; background-color: #f0f7ff; border-radius: 5px;'>";
-            
+
             if ($status === 'approved') {
                 $this->mailer->Body .= "
                         <p style='color: #666; margin: 0;'>

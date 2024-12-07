@@ -11,6 +11,7 @@ if (!isset($_SESSION['temp_email'])) {
 
 $emailService = new EmailService();
 $error = '';
+$twofa_attempts = isset($_SESSION['twofa_attempts']) ? $_SESSION['twofa_attempts'] : 0;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $code = trim($_POST['2fa_code']);
@@ -26,6 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user = $result->fetch_assoc();
 
         if ($user['two_factor_code'] === $code) {
+            // Reset attempts on successful verification
+            $_SESSION['twofa_attempts'] = 0;
+
             if (strtotime($user['two_factor_expires']) > time()) {
                 // Valid code, log the user in
                 $_SESSION['user_id'] = $user['user_id'];
@@ -56,7 +60,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 unset($_SESSION['is_manager']);
             }
         } else {
-            $error = "Invalid verification code.";
+            $twofa_attempts++;
+            $_SESSION['twofa_attempts'] = $twofa_attempts;
+
+            if ($twofa_attempts >= 3) {
+                // Send email notification for suspicious activity
+                $emailService->sendSuspiciousActivityNotification($email);
+                $error = "Too many failed attempts. An email has been sent regarding this activity.";
+            } else {
+                $error = "Invalid verification code. Attempt $twofa_attempts of 3.";
+            }
         }
     } else {
         $error = "User not found.";

@@ -1,18 +1,36 @@
 <?php
 session_start();
-include("connection.php");
-require_once 'emailService.php';
+
+// Set session timeout duration
+$timeout_duration = 900; // 15 minutes
+
+// Check if the user is inactive for more than the timeout duration
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+    session_unset(); // Unset session variables
+    session_destroy(); // Destroy the session
+    header("Location: login.php"); // Redirect to login
+    exit();
+}
+$_SESSION['LAST_ACTIVITY'] = time(); // Update last activity time
 
 // Initialize EmailService
 $emailService = new EmailService();
 $error = "";
+$attempts = isset($_SESSION['login_attempts']) ? $_SESSION['login_attempts'] : 0;
+$wait_time = isset($_SESSION['wait_time']) ? $_SESSION['wait_time'] : 0;
 
-// Clear any existing sessions when accessing login directly
-if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-    session_unset();
+// Check if user is locked out
+if ($attempts >= 4) {
+    $current_time = time();
+    if ($current_time < $wait_time) {
+        $error = "Too many failed attempts. Please wait before trying again.";
+    } else {
+        // Reset attempts after waiting period
+        $_SESSION['login_attempts'] = 0;
+    }
 }
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit']) && $attempts < 4) {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
@@ -25,6 +43,9 @@ if (isset($_POST['submit'])) {
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
         if ($password === $user['password']) {
+            // Reset attempts on successful login
+            $_SESSION['login_attempts'] = 0;
+
             // Store user type for later redirect
             $_SESSION['is_manager'] = $user['is_manager'];
 
@@ -45,7 +66,12 @@ if (isset($_POST['submit'])) {
                 $error = "Failed to send verification code. Please try again.";
             }
         } else {
-            $error = "Incorrect password.";
+            $attempts++;
+            $_SESSION['login_attempts'] = $attempts;
+
+            // Set wait time based on attempts
+            $_SESSION['wait_time'] = time() + (30 * pow(2, $attempts - 1)); // Exponential backoff
+            $error = "Incorrect password. Attempt $attempts of 4.";
         }
     } else {
         $error = "No user found with that email.";
