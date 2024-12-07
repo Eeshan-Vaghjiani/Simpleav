@@ -119,95 +119,161 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
     <link rel="shortcut icon" href="logo2.jpg" type="image/x-icon">
     <title>Login</title>
     <style>
-        body {
-            background-color: #f8f9fa; /* Light background color */
-            font-family: Arial, sans-serif;
-        }
-        /* Loading overlay styles */
-        #loadingOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.9);
-            z-index: 1000;
-            display: none; /* Hidden by default */
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.3s ease; /* Smooth transition */
-        }
-        .loader {
-            border: 8px solid #f3f3f3; /* Light grey */
-            border-top: 8px solid #3498db; /* Blue */
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .container {
-            max-width: 400px;
-            margin: 100px auto; /* Center the form */
-            padding: 20px;
-            background-color: white; /* White background for the form */
-            border-radius: 8px; /* Rounded corners */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333; /* Darker text color */
-        }
-        .input {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        .input input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            transition: border-color 0.3s;
-        }
-        .input input:focus {
-            border-color: #3498db; /* Change border color on focus */
-            outline: none; /* Remove outline */
-        }
-        .input i {
-            position: absolute;
-            top: 50%;
-            left: 10px;
-            transform: translateY(-50%);
-            color: #aaa; /* Icon color */
-        }
-        .btn {
-            width: 100%;
-            background-color: #3498db; /* Button color */
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .btn:hover {
-            background-color: #2980b9; /* Darker button color on hover */
-        }
-        .remember-me {
-            text-align: center;
-            margin-top: 10px;
-        }
-        #countdown {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 10px;
-        }
-    </style>
+    /* Updated loading overlay styles */
+    #loadingOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(52, 152, 219, 0.8), rgba(255, 255, 255, 0.9));
+        z-index: 1000;
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+        flex-direction: column; /* Center elements vertically */
+        animation: fadeIn 0.5s ease; /* Smooth fade-in effect */
+    }
+
+    .loader {
+        border: 8px solid rgba(255, 255, 255, 0.5); /* Light grey */
+        border-top: 8px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite; /* Smooth spinning animation */
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    #loadingOverlay p {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #ffffff;
+        animation: pulse 1.5s infinite; /* Text pulse effect */
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    /* Updated form container styles */
+    .container {
+        max-width: 400px;
+        margin: 100px auto; /* Center the form */
+        padding: 25px;
+        background: linear-gradient(to bottom, #ffffff, #f0f0f0); /* Subtle gradient */
+        border-radius: 10px; /* Smooth rounded corners */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow effect */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+    }
+
+    .container:hover {
+        transform: translateY(-5px); /* Slight hover effect */
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    }
+
+    /* Form input fields */
+    .input {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .input input {
+        width: 100%;
+        padding: 12px 15px 12px 40px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #fafafa; /* Light background for inputs */
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inset shadow */
+        transition: all 0.3s ease; /* Smooth transitions */
+    }
+
+    .input input:focus {
+        border-color: #3498db; /* Highlight border on focus */
+        background: #ffffff; /* Bright background */
+        outline: none; /* Remove outline */
+        box-shadow: 0 0 8px rgba(52, 152, 219, 0.5); /* Glow effect */
+    }
+
+    .input i {
+        position: absolute;
+        top: 50%;
+        left: 12px;
+        transform: translateY(-50%);
+        color: #aaa; /* Icon color */
+        transition: color 0.3s ease; /* Smooth transition for icon color */
+    }
+
+    .input input:focus + i {
+        color: #3498db; /* Change icon color on focus */
+    }
+
+    /* Button styles */
+    .btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(to right, #3498db, #2980b9); /* Gradient background */
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: background 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+    }
+
+    .btn:hover {
+        background: linear-gradient(to right, #2980b9, #1a5276); /* Darker gradient on hover */
+        transform: translateY(-2px); /* Slight hover effect */
+    }
+
+    /* Countdown message styles */
+    #countdown {
+        color: #d9534f; /* Bootstrap's danger color */
+        font-weight: bold;
+        text-align: center;
+        margin-top: 15px;
+        animation: bounceIn 0.6s ease; /* Animated entry */
+    }
+
+    @keyframes bounceIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Navigation styles */
+    .nav {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #3498db; /* Navigation background color */
+        color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+
+    .nav img {
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    .nav .simpleav {
+        font-size: 22px;
+        font-weight: bold;
+    }
+</style>
+
     <script>
         let countdown = <?php echo $countdown; ?>;
         let countdownTimer;
