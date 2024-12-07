@@ -27,10 +27,17 @@ if ($attempts >= 3) {
     if ($current_time < $wait_time) {
         $remaining_time = $wait_time - $current_time;
         $error = "Too many failed attempts. Please wait " . ceil($remaining_time / 60) . " minute(s) before trying again.";
+        $disabled = "disabled"; // Disable input fields
+        $countdown = ceil($remaining_time); // Set countdown timer
     } else {
         // Reset attempts after waiting period
         $_SESSION['login_attempts'] = 0;
+        $disabled = ""; // Enable input fields
+        $countdown = 0; // Reset countdown
     }
+} else {
+    $disabled = ""; // Enable input fields
+    $countdown = 0; // No countdown
 }
 
 if (isset($_POST['submit']) && $attempts < 3) {
@@ -76,10 +83,10 @@ if (isset($_POST['submit']) && $attempts < 3) {
 
                 // Set wait time based on attempts
                 if ($attempts >= 3) {
-                    $_SESSION['wait_time'] = time() + 300; // Lockout for 5 minutes
-                    $error = "Incorrect password. You have reached the maximum number of attempts. Please wait 5 minutes before trying again.";
+                    $_SESSION['wait_time'] = time() + (30 * pow(2, $attempts - 3)); // Lockout time doubles
+                    $error = "Incorrect password. You have reached the maximum number of attempts. Please wait " . (30 * pow(2, $attempts - 3)) . " seconds before trying again.";
                 } else {
-                    $error = "Incorrect password. Attempt $attempts of 3.";
+                    $error = "Incorrect password. Attempt " . $attempts . " of 3.";
                 }
             }
         } else {
@@ -101,6 +108,32 @@ if (isset($_POST['submit']) && $attempts < 3) {
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="logo2.jpg" type="image/x-icon">
     <title>Login</title>
+    <script>
+        let countdown = <?php echo $countdown; ?>;
+        let countdownTimer;
+
+        function startCountdown() {
+            if (countdown > 0) {
+                document.getElementById("loginForm").style.display = "none"; // Hide the form
+                document.getElementById("countdown").innerText = "Please wait " + countdown + " seconds before trying again.";
+                countdownTimer = setInterval(function() {
+                    countdown--;
+                    document.getElementById("countdown").innerText = "Please wait " + countdown + " seconds before trying again.";
+                    if (countdown <= 0) {
+                        clearInterval(countdownTimer);
+                        document.getElementById("loginForm").style.display = "block"; // Show the form
+                        document.getElementById("countdown").innerText = "";
+                    }
+                }, 1000);
+            }
+        }
+
+        window.onload = function() {
+            if (countdown > 0) {
+                startCountdown();
+            }
+        };
+    </script>
 </head>
 <body class="login">
     <nav class="navigation">
@@ -110,10 +143,15 @@ if (isset($_POST['submit']) && $attempts < 3) {
         </div>
     </nav>
     <div class="container">
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+        <form id="loginForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" <?php echo $disabled; ?>>
             <h1>Login</h1>
+            <?php if (!empty($error)): ?>
+                <div class="alert alert-danger" style="color: #721c24;">
+                    <?php echo htmlspecialchars($error); ?>
+                </div>
+            <?php endif; ?>
             <div class="input">
-                 <input style="color: black;" type="email" class="form-control" placeholder="Email Address" name="email" required>
+                <input style="color: black;" type="email" class="form-control" placeholder="Email Address" name="email" required>
                 <i style="color: black;" class="fa fa-envelope"></i>
             </div>
             <div class="input">
@@ -122,9 +160,10 @@ if (isset($_POST['submit']) && $attempts < 3) {
             </div>
             <div class="remember-me">
                 <b><a href="#">Forgot Password?</a></b>
-              </div>
+            </div>
             <button type="submit" name="submit" class="btn">Sign In</button>
         </form>
+        <div id="countdown" style="color: red; font-weight: bold;"></div>
     </div>
 </body>
 </html>
