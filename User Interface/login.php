@@ -83,8 +83,10 @@ if (isset($_POST['submit']) && $attempts < 3) {
 
                 // Set wait time based on attempts
                 if ($attempts >= 3) {
-                    $_SESSION['wait_time'] = time() + (30 * pow(2, $attempts - 3)); // Lockout time doubles
-                    $error = "Incorrect password. You have reached the maximum number of attempts. Please wait " . (30 * pow(2, $attempts - 3)) . " seconds before trying again.";
+                    // Set wait time: 30 seconds, 60 seconds, 120 seconds, 240 seconds, etc.
+                    $wait_time_seconds = 30 * pow(2, $attempts - 3); // 30, 60, 120, 240, ...
+                    $_SESSION['wait_time'] = time() + $wait_time_seconds; // Set the wait time
+                    $error = "Incorrect password. You have reached the maximum number of attempts. Please wait " . $wait_time_seconds . " seconds before trying again.";
                 } else {
                     $error = "Incorrect password. Attempt " . $attempts . " of 3.";
                 }
