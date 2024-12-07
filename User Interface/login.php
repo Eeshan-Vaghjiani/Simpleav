@@ -166,6 +166,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
                 startCountdown();
             }
         };
+
+        function showLoading() {
+            document.getElementById("loadingOverlay").style.display = "flex"; // Show loading overlay
+        }
     </script>
 </head>
 <body class="login">
@@ -180,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
         </div>
     </nav>
     <div class="container">
-        <form id="loginForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" <?php echo $disabled; ?>>
+        <form id="loginForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" <?php echo $disabled; ?> onsubmit="showLoading();">
             <h1>Login</h1>
             <?php if (!empty($error)): ?>
                 <div class="alert alert-danger" style="color: #721c24;">
