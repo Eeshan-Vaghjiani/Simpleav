@@ -70,9 +70,13 @@ if (isset($_POST['submit']) && $attempts < 3) {
                 $stmt = $conn->prepare($query);
                 $stmt->bind_param("ssi", $code, $expires, $user['user_id']);
 
+                // Show loading screen
+                echo '<script>document.getElementById("loadingOverlay").style.display = "block";</script>';
+
                 if ($stmt->execute() && $emailService->send2FACode($email, $code)) {
                     $_SESSION['temp_email'] = $email;
-                    header("Location: verify2fa.php");
+                    // Hide loading screen and redirect
+                    echo '<script>document.getElementById("loadingOverlay").style.display = "none"; window.location.href = "verify2fa.php";</script>';
                     exit();
                 } else {
                     $error = "Failed to send verification code. Please try again.";
@@ -83,7 +87,7 @@ if (isset($_POST['submit']) && $attempts < 3) {
 
                 // Set wait time based on attempts
                 if ($attempts >= 3) {
-                    // Set wait time: 30 seconds, 60 seconds, 120 seconds, 240 seconds, etc.
+                    // Set wait time: 30 seconds, 60 seconds, 120 seconds, etc.
                     $wait_time_seconds = 30 * pow(2, $attempts - 3); // 30, 60, 120, 240, ...
                     $_SESSION['wait_time'] = time() + $wait_time_seconds; // Set the wait time
                     $error = "Incorrect password. You have reached the maximum number of attempts. Please wait " . $wait_time_seconds . " seconds before trying again.";
@@ -110,6 +114,33 @@ if (isset($_POST['submit']) && $attempts < 3) {
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="logo2.jpg" type="image/x-icon">
     <title>Login</title>
+    <style>
+        /* Loading overlay styles */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+        .loader {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
     <script>
         let countdown = <?php echo $countdown; ?>;
         let countdownTimer;
@@ -138,6 +169,10 @@ if (isset($_POST['submit']) && $attempts < 3) {
     </script>
 </head>
 <body class="login">
+    <div id="loadingOverlay">
+        <div class="loader"></div>
+        <p>Sending 2FA code, please wait...</p>
+    </div>
     <nav class="navigation">
         <div class="nav">
             <img src="logo2.png" alt="logo">
