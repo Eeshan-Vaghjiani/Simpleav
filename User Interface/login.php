@@ -191,6 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
 
     .input input {
         width: 100%;
+        height: 100%;
         padding: 12px 15px 12px 40px;
         border: 1px solid #ddd;
         border-radius: 6px;
@@ -257,14 +258,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
     .nav {
         display: flex;
         align-items: center;
-        padding: 10px 20px;
-        background-color: #3498db; /* Navigation background color */
+        padding: 60px 20px;
         color: white;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        border-radius: 50%;
     }
 
     .nav img {
-        height: 40px;
+        height: 100px;
         margin-right: 10px;
     }
 
