@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'emailService.php';
 
 // Set session timeout duration
 $timeout_duration = 900; // 15 minutes
