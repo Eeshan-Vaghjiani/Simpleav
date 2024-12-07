@@ -1,5 +1,5 @@
 <?php
 
-echo "Daraja API by Ayana ";
+echo "Daraja API by Eeshan ";
 
 
