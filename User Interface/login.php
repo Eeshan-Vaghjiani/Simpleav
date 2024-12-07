@@ -177,6 +177,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
             border-color: #3498db; /* Change border color on focus */
             outline: none; /* Remove outline */
         }
+        .input i {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            color: #aaa; /* Icon color */
+        }
         .btn {
             width: 100%;
             background-color: #3498db; /* Button color */
@@ -253,11 +260,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
             <?php endif; ?>
             <div class="input">
                 <input style="color: black;" type="email" class="form-control" placeholder="Email Address" name="email" required>
-                <i style="color: black;" class="fa fa-envelope"></i>
+                <i class="fa fa-envelope"></i>
             </div>
             <div class="input">
                 <input style="color: black;" type="password" class="form-control" placeholder="Password" name="password" required>
-                <i style="color: black;" class="fa fa-lock"></i>
+                <i class="fa fa-lock"></i>
             </div>
             <div class="remember-me">
                 <b><a href="#">Forgot Password?</a></b>
