@@ -119,6 +119,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
     <link rel="shortcut icon" href="logo2.jpg" type="image/x-icon">
     <title>Login</title>
     <style>
+        body {
+            background-color: #f8f9fa; /* Light background color */
+            font-family: Arial, sans-serif;
+        }
         /* Loading overlay styles */
         #loadingOverlay {
             position: fixed;
@@ -126,11 +130,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.9);
             z-index: 1000;
             display: none; /* Hidden by default */
             justify-content: center;
             align-items: center;
+            transition: opacity 0.3s ease; /* Smooth transition */
         }
         .loader {
             border: 8px solid #f3f3f3; /* Light grey */
@@ -138,11 +143,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
             border-radius: 50%;
             width: 60px;
             height: 60px;
-            animation: spin 2s linear infinite;
+            animation: spin 1s linear infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        .container {
+            max-width: 400px;
+            margin: 100px auto; /* Center the form */
+            padding: 20px;
+            background-color: white; /* White background for the form */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333; /* Darker text color */
+        }
+        .input {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .input input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+        .input input:focus {
+            border-color: #3498db; /* Change border color on focus */
+            outline: none; /* Remove outline */
+        }
+        .btn {
+            width: 100%;
+            background-color: #3498db; /* Button color */
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2980b9; /* Darker button color on hover */
+        }
+        .remember-me {
+            text-align: center;
+            margin-top: 10px;
+        }
+        #countdown {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
     <script>
@@ -208,7 +264,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
             </div>
             <button type="submit" name="submit" class="btn">Sign In</button>
         </form>
-        <div id="countdown" style="color: red; font-weight: bold;"></div>
+        <div id="countdown"></div>
     </div>
 </body>
 </html>
