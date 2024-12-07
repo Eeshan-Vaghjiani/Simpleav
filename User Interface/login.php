@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'emailService.php';
+require_once 'connection.php';
 
 // Set session timeout duration
 $timeout_duration = 900; // 15 minutes
@@ -21,61 +22,71 @@ $attempts = isset($_SESSION['login_attempts']) ? $_SESSION['login_attempts'] : 0
 $wait_time = isset($_SESSION['wait_time']) ? $_SESSION['wait_time'] : 0;
 
 // Check if user is locked out
-if ($attempts >= 4) {
+if ($attempts >= 3) {
     $current_time = time();
     if ($current_time < $wait_time) {
-        $error = "Too many failed attempts. Please wait before trying again.";
+        $remaining_time = $wait_time - $current_time;
+        $error = "Too many failed attempts. Please wait " . ceil($remaining_time / 60) . " minute(s) before trying again.";
     } else {
         // Reset attempts after waiting period
         $_SESSION['login_attempts'] = 0;
     }
 }
 
-if (isset($_POST['submit']) && $attempts < 4) {
+if (isset($_POST['submit']) && $attempts < 3) {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    $query = "SELECT * FROM tbl_user WHERE email = ? LIMIT 1";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Ensure $conn is defined and connected
+    if ($conn) {
+        $query = "SELECT * FROM tbl_user WHERE email = ? LIMIT 1";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if ($result->num_rows === 1) {
-        $user = $result->fetch_assoc();
-        if ($password === $user['password']) {
-            // Reset attempts on successful login
-            $_SESSION['login_attempts'] = 0;
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+            if ($password === $user['password']) {
+                // Reset attempts on successful login
+                $_SESSION['login_attempts'] = 0;
 
-            // Store user type for later redirect
-            $_SESSION['is_manager'] = $user['is_manager'];
+                // Store user type for later redirect
+                $_SESSION['is_manager'] = $user['is_manager'];
 
-            // Generate 2FA code
-            $code = sprintf("%06d", random_int(0, 999999));
-            $expires = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+                // Generate 2FA code
+                $code = sprintf("%06d", random_int(0, 999999));
+                $expires = date('Y-m-d H:i:s', strtotime('+15 minutes'));
 
-            // Store code in database
-            $query = "UPDATE tbl_user SET two_factor_code = ?, two_factor_expires = ? WHERE user_id = ?";
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("ssi", $code, $expires, $user['user_id']);
+                // Store code in database
+                $query = "UPDATE tbl_user SET two_factor_code = ?, two_factor_expires = ? WHERE user_id = ?";
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param("ssi", $code, $expires, $user['user_id']);
 
-            if ($stmt->execute() && $emailService->send2FACode($email, $code)) {
-                $_SESSION['temp_email'] = $email;
-                header("Location: verify2fa.php");
-                exit();
+                if ($stmt->execute() && $emailService->send2FACode($email, $code)) {
+                    $_SESSION['temp_email'] = $email;
+                    header("Location: verify2fa.php");
+                    exit();
+                } else {
+                    $error = "Failed to send verification code. Please try again.";
+                }
             } else {
-                $error = "Failed to send verification code. Please try again.";
+                $attempts++;
+                $_SESSION['login_attempts'] = $attempts;
+
+                // Set wait time based on attempts
+                if ($attempts >= 3) {
+                    $_SESSION['wait_time'] = time() + 300; // Lockout for 5 minutes
+                    $error = "Incorrect password. You have reached the maximum number of attempts. Please wait 5 minutes before trying again.";
+                } else {
+                    $error = "Incorrect password. Attempt $attempts of 3.";
+                }
             }
         } else {
-            $attempts++;
-            $_SESSION['login_attempts'] = $attempts;
-
-            // Set wait time based on attempts
-            $_SESSION['wait_time'] = time() + (30 * pow(2, $attempts - 1)); // Exponential backoff
-            $error = "Incorrect password. Attempt $attempts of 4.";
+            $error = "No user found with that email.";
         }
     } else {
-        $error = "No user found with that email.";
+        $error = "Database connection failed.";
     }
 }
 ?>
