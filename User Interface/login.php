@@ -70,11 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $attempts < 3) {
                 $stmt = $conn->prepare($query);
                 $stmt->bind_param("ssi", $code, $expires, $user['user_id']);
 
+                // Show loading screen
+                echo '<script>
+                        document.getElementById("loadingOverlay").style.display = "flex"; // Show loading overlay
+                      </script>';
+
                 if ($stmt->execute() && $emailService->send2FACode($email, $code)) {
                     $_SESSION['temp_email'] = $email;
-                    // Redirect after a short delay to allow the loading screen to be visible
+                    // Redirect immediately after sending the email
                     echo '<script>
-                            document.getElementById("loadingOverlay").style.display = "none"; // Hide loading overlay
                             window.location.href = "verify2fa.php"; // Redirect to verify 2FA
                           </script>';
                     exit();
