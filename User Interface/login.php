@@ -71,12 +71,20 @@ if (isset($_POST['submit']) && $attempts < 3) {
                 $stmt->bind_param("ssi", $code, $expires, $user['user_id']);
 
                 // Show loading screen
-                echo '<script>document.getElementById("loadingOverlay").style.display = "block";</script>';
+                echo '<script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            document.getElementById("loadingOverlay").style.display = "flex"; // Show loading overlay
+                        });
+                      </script>';
 
                 if ($stmt->execute() && $emailService->send2FACode($email, $code)) {
                     $_SESSION['temp_email'] = $email;
-                    // Hide loading screen and redirect
-                    echo '<script>document.getElementById("loadingOverlay").style.display = "none"; window.location.href = "verify2fa.php";</script>';
+                    // Redirect after a short delay to allow the loading screen to be visible
+                    echo '<script>
+                            setTimeout(function() {
+                                window.location.href = "verify2fa.php";
+                            }, 1000); // Redirect after 1 second
+                          </script>';
                     exit();
                 } else {
                     $error = "Failed to send verification code. Please try again.";
@@ -169,7 +177,7 @@ if (isset($_POST['submit']) && $attempts < 3) {
     </script>
 </head>
 <body class="login">
-    <div id="loadingOverlay">
+    <div id="loadingOverlay" style="display: none;">
         <div class="loader"></div>
         <p>Sending 2FA code, please wait...</p>
     </div>
